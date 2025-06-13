@@ -40,8 +40,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         style={{ minWidth: "220px" }}
       >
         {/* Close button (mobile only) */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-          <img src="/logo-wordmark.svg" alt="Tracklyst" className="h-8 md:block" />
+        <div className="flex items-center justify-between h-16 px-4 border-0 border-gray-200 ">
+          <img src="/logo-icon.png" alt="Tracklyst circular logo icon with stylized upward arrow, part of sidebar navigation in a finance app" className="h-12 w-auto mr-0" />
+          <img src="/logo-wordmark.png" alt="Tracklyst wordmark in modern font, displayed next to the logo icon in the sidebar header, representing the finance app brand" className="h-14 w-auto ml-[-2]" />
           <button
             className="md:hidden p-2"
             onClick={() => setSidebarOpen(false)}
@@ -54,16 +55,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </div>
         <nav className="flex-1 px-2 py-4 overflow-y-auto">
           {navItems.map((item) => (
-            <Link href={item.href} key={item.href}>
-              <a
-                className={`flex items-center px-4 py-2 mb-2 rounded-lg text-gray-700 hover:bg-gray-100 transition
-                  ${router.pathname === item.href ? "bg-gray-200 font-semibold" : ""}
-                `}
-                onClick={() => setSidebarOpen(false)} // close sidebar on mobile after nav
-              >
-                <img src={item.icon} alt="" className="w-5 h-5 mr-3" />
-                {item.label}
-              </a>
+            <Link
+              href={item.href}
+              key={item.href}
+              className={`flex items-center px-4 py-2 mb-2 rounded-lg text-gray-700 hover:bg-gray-100 transition
+                ${router.pathname === item.href ? "bg-gray-200 font-semibold" : ""}
+              `}
+              onClick={() => setSidebarOpen(false)} // close sidebar on mobile after nav
+            >
+              <img src={item.icon} alt="" className="w-5 h-5 mr-3" />
+              {item.label}
             </Link>
           ))}
         </nav>
@@ -84,4 +85,3 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     </div>
   );
 }
-
