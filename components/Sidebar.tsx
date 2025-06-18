@@ -3,8 +3,7 @@ import Link from 'next/link';
 
 const navItems = [
   { label: 'Home',            href: '/home',      icon: '/icons/home.svg' },
-  { label: 'Add Transaction', href: '/',          icon: '/icons/add.svg' },
-  { label: 'Edit Transactions', href: '/edit',    icon: '/icons/edit.svg' },
+  { label: 'Add Transaction', href: '/add',       icon: '/icons/add.svg' },
   { label: 'Investing',       href: '/investing', icon: '/icons/chart.svg' },
   { label: 'Goals',           href: '/goals',     icon: '/icons/target.svg' },
   { label: 'Profile',         href: '/profile',   icon: '/icons/profile.svg' },

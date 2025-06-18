@@ -1,5 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import type { NextPage } from "next";
+import { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -18,7 +17,7 @@ type CustomCategories = {
   expense: string[];
 };
 
-const EditPage: NextPage = () => {
+export default function EditPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [customCategories, setCustomCategories] = useState<CustomCategories>({
     income: [],
@@ -160,7 +159,7 @@ const EditPage: NextPage = () => {
         {transactions.length === 0 ? (
           <p className="mb-4">
             No transactions yet.{" "}
-            <Link href="/" className="text-blue-600 underline">
+            <Link href="/add" className="text-blue-600 underline">
               Add one here
             </Link>
             .
@@ -308,7 +307,7 @@ const EditPage: NextPage = () => {
 
         <div className="mt-6">
           <Link
-            href="/"
+            href="/add"
             className="text-blue-600 underline"
             aria-label="Go back to Add page"
           >
@@ -318,6 +317,4 @@ const EditPage: NextPage = () => {
       </main>
     </>
   );
-};
-
-export default EditPage;
+}

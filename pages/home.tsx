@@ -36,7 +36,7 @@ const RANGE_OPTIONS = [
 
 type RangeOption = typeof RANGE_OPTIONS[number];
 
-export default function HomePage() {
+const HomePage: NextPage = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [range, setRange] = useState<RangeOption>("All Time");
   const [customStart, setCustomStart] = useState<string>(
@@ -46,10 +46,20 @@ export default function HomePage() {
     new Date().toISOString().slice(0, 10)
   );
 
-  // load once
+  // State for initial balance and index
+  const [initialBalance, setInitialBalance] = useState(0);
+  const [balanceSetIdx, setBalanceSetIdx] = useState(0);
+
   useEffect(() => {
     const tx = localStorage.getItem("transactions");
     if (tx) setTransactions(JSON.parse(tx));
+
+    // Load base balance and index
+    const storedBalance = localStorage.getItem("editPageBaseBalance");
+    setInitialBalance(storedBalance ? Number(storedBalance) : 0);
+
+    const storedIdx = localStorage.getItem("editPageBalanceSetIdx");
+    setBalanceSetIdx(storedIdx ? Number(storedIdx) : 0);
   }, []);
 
   // determine filter dates
@@ -85,7 +95,7 @@ export default function HomePage() {
     return [start, end];
   }, [range, customStart, customEnd]);
 
-  // filtered transactions
+  // filtered transactions (by date)
   const filtered = useMemo(
     () =>
       transactions.filter((t) => {
@@ -95,35 +105,46 @@ export default function HomePage() {
     [transactions, startDate, endDate]
   );
 
+  // ONLY consider transactions AFTER last set balance
+  const effectiveTransactions = useMemo(
+    () => filtered.slice(balanceSetIdx),
+    [filtered, balanceSetIdx]
+  );
+
   // totals
   const { totalIncome, totalExpense, balance } = useMemo(() => {
     let inc = 0,
       exp = 0;
-    for (const t of filtered) {
+    for (const t of effectiveTransactions) {
       if (t.type === "income") inc += t.amount;
       else exp += t.amount;
     }
-    return { totalIncome: inc, totalExpense: exp, balance: inc - exp };
-  }, [filtered]);
+    // Add only transactions after last set balance to the set balance itself!
+    return {
+      totalIncome: inc,
+      totalExpense: exp,
+      balance: initialBalance + inc - exp,
+    };
+  }, [effectiveTransactions, initialBalance]);
 
   // aggregate by category
   const aggregate = useCallback(
     (type: "income" | "expense") =>
       Object.entries(
-        filtered
+        effectiveTransactions
           .filter((t) => t.type === type)
           .reduce<Record<string, number>>((acc, t) => {
             acc[t.category] = (acc[t.category] || 0) + t.amount;
             return acc;
           }, {})
       ).map(([category, value]) => ({ category, value })),
-    [filtered]
+    [effectiveTransactions]
   );
 
   const incomeData = useMemo(() => aggregate("income"), [aggregate]);
   const expenseData = useMemo(() => aggregate("expense"), [aggregate]);
 
-  // recent
+  // recent (show ALL filtered, not just after balanceSetIdx!)
   const recent = useMemo(
     () =>
       [...filtered]
@@ -339,4 +360,6 @@ export default function HomePage() {
       </main>
     </>
   );
-}
+};
+
+export default HomePage;

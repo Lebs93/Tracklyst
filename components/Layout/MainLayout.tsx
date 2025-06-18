@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-// Your navigation items
+// Your navigation items (EDIT: removed Edit Transactions)
 const navItems = [
   { href: "/home", label: "Home", icon: "/icons/home.svg" },
   { href: "/add", label: "Add Transaction", icon: "/icons/add.svg" },
-  { href: "/edit", label: "Edit Transactions", icon: "/icons/edit.svg" },
   { href: "/investing", label: "Investing", icon: "/icons/chart.svg" },
   { href: "/goals", label: "Goals", icon: "/icons/target.svg" },
   { href: "/profile", label: "Profile", icon: "/icons/profile.svg" },
